@@ -1,5 +1,5 @@
 import store from './store'
-import {playerPositonUpdate} from './world'
+import {playerPositonUpdate} from './actions'
 
 const arrowKeyRelation = {
   ArrowUp: {position: {x: 0, y: -1}},

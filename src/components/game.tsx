@@ -4,10 +4,9 @@ import {connect} from 'react-redux'
 
 import Grid from './Grid'
 import Squares from './Squares'
-import {StoreState} from './store'
-import {Player, Square} from './types'
-import {squaresUpdateVisitTime} from './world'
-import {distanceNSquares, calculatePlayerVisitPresence} from './util'
+import {StoreState} from '../store'
+import {Player, Square} from '../types'
+import {squaresUpdateVisitTime} from '../world'
 
 interface Props {
   player: Player

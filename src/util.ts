@@ -1,7 +1,7 @@
 import {clone, compact, toPairs, flatMap, uniqWith, Omit} from 'lodash'
 
 import {Player, Square} from './types'
-import {dimensions} from './grid'
+import {dimensions} from './components/grid'
 
 type KeyTransform<O, K extends keyof O, R> = (
   o: O,
@@ -100,15 +100,14 @@ export const distanceNSquares = (
         summedPosition => squares[positionToIndex(summedPosition, dimensions)]
       )
       .filter(Boolean)
-  const flattened = flatMap(
-    borderMovements
-      .map(movement => positionSum(movement, position))
-      .filter(isInBounds),
-    summedPosition => distanceNSquares(n - 1, squares, summedPosition)
-  )
-  return uniqWithPosition(flattened).filter(
-    square => !positionEqual(square.position, position)
-  )
+  return uniqWithPosition(
+    flatMap(
+      borderMovements
+        .map(movement => positionSum(movement, position))
+        .filter(isInBounds),
+      summedPosition => distanceNSquares(n - 1, squares, summedPosition)
+    )
+  ).filter(square => !positionEqual(square.position, position))
 }
 
 export const calculatePlayerVisitPresence = ({

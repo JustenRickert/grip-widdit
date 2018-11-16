@@ -8,37 +8,16 @@ import {
   positionSum,
   indexToPosition
 } from './util'
-import {dimensions} from './grid'
+import {dimensions} from './components/grid'
 import {Square, Commodities, Player, World} from './types'
-
-const PLAYER_MOVE_POSITION = 'PLAYER_UPDATE_POSITION'
-interface MovePlayerPositionAction {
-  type: typeof PLAYER_MOVE_POSITION
-  payload: {position: {x: number; y: number}}
-}
-export const playerPositonUpdate = (payload: {
-  position: {x: number; y: number}
-}): MovePlayerPositionAction => ({
-  type: PLAYER_MOVE_POSITION,
-  payload
-})
-
-const PLAYER_ADD_COMMODITY = 'PLAYER_ADD_COMMODITY'
-interface AddPlayerCommodityAction {
-  type: typeof PLAYER_ADD_COMMODITY
-  payload: {key: keyof Commodities; amount: number}
-}
-export const addPlayerCommodity = (
-  payload: AddPlayerCommodityAction['payload']
-): AddPlayerCommodityAction => ({type: PLAYER_ADD_COMMODITY, payload})
-
-const SQUARES_UPDATE_VISIT_TIME = 'SQUARES_UPDATE_VISIT_TIME'
-interface UpdateSquaresVisitTimeAction {
-  type: typeof SQUARES_UPDATE_VISIT_TIME
-}
-export const squaresUpdateVisitTime = (): UpdateSquaresVisitTimeAction => ({
-  type: SQUARES_UPDATE_VISIT_TIME
-})
+import {
+  MovePlayerPositionAction,
+  AddPlayerCommodityAction,
+  PLAYER_MOVE_POSITION,
+  PLAYER_ADD_COMMODITY,
+  UpdateSquaresVisitTimeAction,
+  SQUARES_UPDATE_VISIT_TIME
+} from './actions'
 
 export type PlayerAction = MovePlayerPositionAction | AddPlayerCommodityAction
 const clampHeight = clamp(0, dimensions[1] - 1)
@@ -79,27 +58,34 @@ const squaresReducer = (
       const {squares, player} = state
       const presenceUpdateMap = calculatePlayerVisitPresence({player, squares})
       const playerIndex = positionToIndex(player.position, dimensions)
-      return squares.map(
-        (square, i) =>
-          presenceUpdateMap.has(square)
-            ? {
-                ...square,
-                visitTime: square.visitTime + presenceUpdateMap.get(square)!
-              }
-            : square
-      )
+      return squares
+        .map(
+          (square, i) =>
+            presenceUpdateMap.has(square)
+              ? {
+                  ...square,
+                  value: square.value + presenceUpdateMap.get(square)!
+                }
+              : square
+        )
+        .map(
+          (square, i) =>
+            i === playerIndex
+              ? {...square, visitTime: square.visitTime + 1}
+              : square
+        )
   }
   return state.squares
 }
 
-const defaultPosition = {x: 0, y: 0}
 const defaultWorld: World = {
   player: {
     commodities: {capital: 0},
-    position: defaultPosition,
+    position: {x: 0, y: 0},
     visitPresence: 1.1
   },
   squares: range(dimensions[0] * dimensions[1]).map(i => ({
+    value: 0,
     visitTime: 0,
     position: indexToPosition(i, dimensions)
   }))

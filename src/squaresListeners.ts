@@ -1,7 +1,7 @@
 import {timer} from 'rxjs'
 
 import store from './store'
-import {squaresUpdateVisitTime} from './world'
+import {squaresUpdateVisitTime} from './actions'
 
 const secondCounter = timer(0, 1000)
 

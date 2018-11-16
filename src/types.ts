@@ -1,4 +1,8 @@
-export type Square = {visitTime: number; position: {x: number; y: number}}
+export type Square = {
+  value: number
+  visitTime: number
+  position: {x: number; y: number}
+}
 
 export type Commodities = {
   capital: number

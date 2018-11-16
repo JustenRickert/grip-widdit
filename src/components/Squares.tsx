@@ -2,9 +2,9 @@ import * as React from 'react'
 import {connect} from 'react-redux'
 
 import {dimensions} from './grid'
-import {Square} from './types'
-import {indexToPosition} from './util'
-import {StoreState} from './store'
+import {Square} from '../types'
+import {indexToPosition} from '../util'
+import {StoreState} from '../store'
 
 interface Props {
   squares: Square[]
@@ -26,7 +26,8 @@ const Squares = ({squares}: Props) => (
       {squares.map((square, index) => (
         <li key={index}>
           <Position position={indexToPosition(index, dimensions)} />
-          {square.visitTime.toFixed(2)}
+          <div>time visited: {square.visitTime.toFixed(0)}</div>
+          <div>value of: {square.value.toFixed(2)}</div>
         </li>
       ))}
     </ul>

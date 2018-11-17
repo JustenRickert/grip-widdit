@@ -13,27 +13,42 @@ import {Square, Commodities, Player, World} from './types'
 import {
   MovePlayerPositionAction,
   AddPlayerCommodityAction,
+  PLAYER_TAX_SQUARE,
   PLAYER_MOVE_POSITION,
   PLAYER_ADD_COMMODITY,
   UpdateSquaresVisitTimeAction,
-  SQUARES_UPDATE_VISIT_TIME
+  SQUARES_UPDATE_VISIT_TIME,
+  PlayerTaxSquareAction
 } from './actions'
 
 export type WorldAction =
-  | UpdateSquaresVisitTimeAction
-  | MovePlayerPositionAction
   | AddPlayerCommodityAction
+  | MovePlayerPositionAction
+  | PlayerTaxSquareAction
+  | UpdateSquaresVisitTimeAction
+
+const reduceAddCommodity = (
+  player: Player,
+  payload: {key: keyof Player['commodities']; amount: number}
+) => ({
+  ...player,
+  commodities: {
+    ...player.commodities,
+    [payload.key]: player.commodities[payload.key] + payload.amount
+  }
+})
 
 const playerReducer = (state: World, action: WorldAction): World['player'] => {
   switch (action.type) {
-    case PLAYER_ADD_COMMODITY: {
-      const {player, player: {commodities}} = state
-      const {payload: {key, amount}} = action
-      return {
-        ...player,
-        commodities: {...commodities, [key]: commodities[key] + amount}
-      }
+    case PLAYER_TAX_SQUARE: {
+      const {payload: {square, tax}} = action
+      return reduceAddCommodity(state.player, {
+        key: 'capital',
+        amount: tax * square.value
+      })
     }
+    case PLAYER_ADD_COMMODITY:
+      return reduceAddCommodity(state.player, action.payload)
     case PLAYER_MOVE_POSITION: {
       const {player} = state
       const {payload} = action
@@ -51,6 +66,18 @@ const squaresReducer = (
   action: WorldAction
 ): World['squares'] => {
   switch (action.type) {
+    case PLAYER_TAX_SQUARE: {
+      const {payload} = action
+      return state.squares.map(
+        (square: Square, i: number) =>
+          positionToIndex(payload.square.position, dimensions) === i
+            ? {
+                ...square,
+                value: (1 - payload.tax) * square.value
+              }
+            : square
+      )
+    }
     case SQUARES_UPDATE_VISIT_TIME: {
       const {squares, player} = state
       const playerIndex = positionToIndex(player.position, dimensions)

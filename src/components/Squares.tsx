@@ -1,12 +1,15 @@
 import * as React from 'react'
+import {Dispatch} from 'redux'
 import {connect} from 'react-redux'
 
-import {dimensions} from './grid'
-import {UlSquareInfo, LiSquare} from './styles'
-
 import {Square} from '../types'
-import {indexToPosition} from '../util'
 import {StoreState} from '../store'
+
+import {indexToPosition} from '../util'
+import {dimensions} from './grid'
+
+import {UlSquareInfo, LiSquare} from './styles'
+import TaxButton from './TaxButton'
 
 interface Props {
   squares: Square[]
@@ -32,6 +35,7 @@ const Squares = ({squares}: Props) => (
           <Position position={indexToPosition(index, dimensions)} />
           <div>time visited: {square.visitTime.toFixed(0)}</div>
           <div>value of: {square.value.toFixed(2)}</div>
+          <TaxButton square={square} />
         </LiSquare>
       ))}
     </UlSquareInfo>

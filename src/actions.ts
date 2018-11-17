@@ -1,4 +1,4 @@
-import {Commodities, Tax, Income} from './types'
+import {Commodities, Tax, Income, Square} from './types'
 
 /**
  * WORLD
@@ -14,6 +14,19 @@ export const playerPositonUpdate = (payload: {
 }): MovePlayerPositionAction => ({
   type: PLAYER_MOVE_POSITION,
   payload
+})
+
+export const PLAYER_TAX_SQUARE = 'PLAYER_TAX_SQUARE'
+export interface PlayerTaxSquareAction {
+  type: typeof PLAYER_TAX_SQUARE
+  payload: {square: Square; tax: number}
+}
+export const playerTaxSquare = (
+  square: Square,
+  tax: number
+): PlayerTaxSquareAction => ({
+  type: PLAYER_TAX_SQUARE,
+  payload: {square, tax}
 })
 
 export const PLAYER_ADD_COMMODITY = 'PLAYER_ADD_COMMODITY'

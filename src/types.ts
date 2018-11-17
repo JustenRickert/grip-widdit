@@ -21,17 +21,17 @@ export type World = {
 }
 
 export type Tax<T = {}> = T & {
-  square: Square
+  squareIndex: number
   amount: number
   explanation: number
 }
 export type Income<T = {}> = T & {
-  square: Square
+  squareIndex: number
   amount: number
   explanation: number
 }
 
-export type Government = {
+export type Government<T = {}> = {
   /**
    * In this representation of Modern Monetary Theory, there are two variables
    * to consider. The first is `taxes`, and the second is `income` (an ironic
@@ -47,6 +47,6 @@ export type Government = {
    * this by taking money away from the people in the form of taxes. Keeping
    * both in balance is the whole point of the game!
    */
-  income: {historical: Income<any>[]}
-  taxes: {historical: Tax<any>[]}
+  income: {historical: Income<T>[]}
+  taxes: {historical: Tax<T>[]}
 }

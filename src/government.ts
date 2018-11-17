@@ -28,8 +28,8 @@ const toStateKey: Record<
 }
 
 export const governmentReducer: Reducer<
-  Government,
-  GovernmentAction<any, any>
+  Government<{}>,
+  GovernmentAction<{}, {}>
 > = (state = defaultState, {type, payload}) => {
   if (
     [ADD_INCOME_HISTORY, ADD_TAXES_HISTORY].some(

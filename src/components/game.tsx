@@ -6,7 +6,6 @@ import Grid from './Grid'
 import Squares from './Squares'
 import {StoreState} from '../store'
 import {Player, Square} from '../types'
-import {squaresUpdateVisitTime} from '../world'
 
 interface Props {
   player: Player
@@ -20,7 +19,7 @@ const mapState = (state: StoreState) => ({
 
 const Game = (props: Props) => {
   return (
-    <div style={{display: 'flex'}}>
+    <div style={{display: 'flex', height: '100%'}}>
       <Grid />
       <Squares />
     </div>

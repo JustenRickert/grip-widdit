@@ -2,6 +2,7 @@ export type Square = {
   value: number
   visitTime: number
   position: {x: number; y: number}
+  visitPresence: number | null
 }
 
 export type Commodities = {

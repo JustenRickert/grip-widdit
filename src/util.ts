@@ -110,11 +110,13 @@ export const distanceNSquares = (
   ).filter(square => !positionEqual(square.position, position))
 }
 
-export const calculatePlayerVisitPresence = ({
+export const calculatePlayerVisitPresence = <
+  P extends {visitPresence: number; position: {x: number; y: number}}
+>({
   player,
   squares
 }: {
-  player: Player
+  player: P
   squares: Square[]
 }): Map<Square, number> => {
   const nDistancesSquares = [1, 2, 3].map<[number, Square[]]>(n => [

@@ -3,20 +3,12 @@ import {Dispatch} from 'redux'
 import {connect} from 'react-redux'
 import {range} from 'lodash'
 import styled from 'styled-components'
-import {World} from './types'
+
+import {PlayerIconWrapper, StyledGrid, GridSquare} from './styles'
+
+import {World} from '../types'
 
 export const dimensions: [number, number] = [5, 5]
-
-const squareLength = '6em'
-
-export const PlayerIconWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  width: ${squareLength};
-  height: ${squareLength};
-`
 
 const PlayerView = ({
   player: {position: {x, y}},
@@ -37,35 +29,10 @@ const PlayerView = ({
         transform: `translate(${left - leftOffset}px, ${top - topOffset}px)`,
         transition: 'all 300ms'
       }}
-      children={<div children="ME" />} // TODO: replace me with a cool icon of some kind! :)
+      children={<div children="ME" />}
     />
   )
 }
-
-interface StyledGridProps {
-  columns: number
-}
-
-export const StyledGrid = styled.div`
-  display: grid;
-  grid-gap: 1em;
-  max-width: 12em;
-  grid-template-columns: repeat(
-    ${(props: StyledGridProps) => props.columns},
-    1fr
-  );
-`
-
-export const GridSquare = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: ${squareLength};
-  height: ${squareLength};
-  box-sizing: border-box;
-  border: 1px black solid;
-  transition: all 2s;
-`
 
 interface Props {
   player: World['player']

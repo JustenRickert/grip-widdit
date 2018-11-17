@@ -1,6 +1,15 @@
 import store from './store'
 import {playerPositonUpdate} from './actions'
 
+import {dimensions} from './components/grid'
+import {clamp, positionSum} from './util'
+const clampHeight = clamp(0, dimensions[1] - 1)
+const clampWidth = clamp(0, dimensions[0] - 1)
+const positionClamp = (p: {x: number; y: number}) => ({
+  x: clampWidth(p.x),
+  y: clampHeight(p.y)
+})
+
 const arrowKeyRelation = {
   ArrowUp: {position: {x: 0, y: -1}},
   ArrowLeft: {position: {x: -1, y: 0}},
@@ -15,12 +24,15 @@ const onArrowEvent = (e: KeyboardEvent) => {
     )
   )
     return
+  const {world: {player}} = store.getState()
+  const movement =
+    arrowKeyRelation[
+      e.key as 'ArrowUp' | 'ArrowLeft' | 'ArrowRight' | 'ArrowDown'
+    ]
   store.dispatch(
-    playerPositonUpdate(
-      arrowKeyRelation[
-        e.key as 'ArrowUp' | 'ArrowLeft' | 'ArrowRight' | 'ArrowDown'
-      ]
-    )
+    playerPositonUpdate({
+      position: positionClamp(positionSum(player.position, movement.position))
+    })
   )
 }
 

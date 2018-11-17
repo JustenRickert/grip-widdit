@@ -1,6 +1,10 @@
-import {Commodities} from './types'
+import {Commodities, Tax, Income} from './types'
 
-export const PLAYER_MOVE_POSITION = 'PLAYER_UPDATE_POSITION'
+/**
+ * WORLD
+ */
+
+export const PLAYER_MOVE_POSITION = 'PLAYER_MOVE_POSITION'
 export interface MovePlayerPositionAction {
   type: typeof PLAYER_MOVE_POSITION
   payload: {position: {x: number; y: number}}
@@ -28,3 +32,19 @@ export interface UpdateSquaresVisitTimeAction {
 export const squaresUpdateVisitTime = (): UpdateSquaresVisitTimeAction => ({
   type: SQUARES_UPDATE_VISIT_TIME
 })
+
+/**
+ * GOVERNMENT
+ */
+
+export const ADD_INCOME_HISTORY = 'GOVERNMENT_ADD_INCOME_HISTORY'
+export interface AddGovernmentIncomeHistoryAction<T> {
+  type: typeof ADD_INCOME_HISTORY
+  payload: {income: Income<T>}
+}
+
+export const ADD_TAXES_HISTORY = 'GOVERNMENT_ADD_TAXES_HISTORY'
+export interface AddGovernmentTaxesHistoryAction<T> {
+  type: typeof ADD_INCOME_HISTORY
+  payload: {tax: Tax<T>}
+}

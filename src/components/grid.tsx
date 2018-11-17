@@ -4,9 +4,10 @@ import {connect} from 'react-redux'
 import {range} from 'lodash'
 import styled from 'styled-components'
 
-import {PlayerIconWrapper, StyledGrid, GridSquare} from './styles'
-
 import {World} from '../types'
+
+import {PlayerIconWrapper, StyledGrid, GridSquare} from './styles'
+import TaxButton from './TaxButton'
 
 export const dimensions: [number, number] = [5, 5]
 
@@ -58,7 +59,10 @@ class Grid extends React.Component<Props> {
         )}
         <StyledGrid innerRef={this.gridRef} columns={dimensions[0]}>
           {range(dimensions[0] * dimensions[1]).map(i => (
-            <GridSquare key={i} children="." />
+            <GridSquare
+              key={i}
+              children={<TaxButton onClick={() => console.log("TAX 'EM")} />}
+            />
           ))}
         </StyledGrid>
       </div>

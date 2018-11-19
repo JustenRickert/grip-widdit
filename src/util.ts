@@ -1,4 +1,4 @@
-import {clone, compact, toPairs, range, flatMap, uniqWith, Omit} from 'lodash'
+import {clone, compact, toPairs, flatMap, uniqWith, Omit} from 'lodash'
 
 import {Player, Square} from './types'
 import {dimensions} from './components/grid'
@@ -87,26 +87,27 @@ const [maxX, maxY] = dimensions
 const isInBounds = ({x, y}: {x: number; y: number}) =>
   x >= 0 && y >= 0 && x < maxX && y < maxY
 
-const positionDistance = (
-  p1: {x: number; y: number},
-  p2: {x: number; y: number}
-) => Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y)
-
 export const distanceNSquares = (
   n: number,
   squares: Square[],
   position: {x: number; y: number}
 ): Square[] => {
-  const distancesNSquares: Square[] = []
-  range(dimensions[0] * dimensions[1]).map(i => {
-    const testPosition = indexToPosition(i, dimensions)
-    if (
-      isInBounds(testPosition) &&
-      positionDistance(testPosition, position) === n
+  if (n === 1)
+    return borderMovements
+      .map(movement => positionSum(movement, position))
+      .filter(isInBounds)
+      .map(
+        summedPosition => squares[positionToIndex(summedPosition, dimensions)]
+      )
+      .filter(Boolean)
+  return uniqWithPosition(
+    flatMap(
+      borderMovements
+        .map(movement => positionSum(movement, position))
+        .filter(isInBounds),
+      summedPosition => distanceNSquares(n - 1, squares, summedPosition)
     )
-      distancesNSquares.push(squares[i])
-  })
-  return distancesNSquares
+  ).filter(square => !positionEqual(square.position, position))
 }
 
 export const calculatePlayerVisitPresence = <

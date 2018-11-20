@@ -6,10 +6,11 @@ import {
   calculatePlayerVisitPresence,
   positionToIndex,
   positionSum,
-  indexToPosition
-} from './util'
-import {dimensions} from './components/grid'
-import {Square, Commodities, Player, World} from './types'
+  indexToPosition,
+  updateAt
+} from '../util'
+import {dimensions} from '../components/grid'
+import {Square, Commodities, Player, World} from '../types'
 import {
   MovePlayerPositionAction,
   AddPlayerCommodityAction,
@@ -19,7 +20,7 @@ import {
   UpdateSquaresVisitTimeAction,
   SQUARES_UPDATE_VISIT_TIME,
   PlayerTaxSquareAction
-} from './actions'
+} from '../actions'
 
 export type WorldAction =
   | AddPlayerCommodityAction
@@ -44,7 +45,7 @@ const playerReducer = (state: World, action: WorldAction): World['player'] => {
       const {payload: {square, tax}} = action
       return reduceAddCommodity(state.player, {
         key: 'capital',
-        amount: tax * square.value
+        amount: tax.percentage * square.value
       })
     }
     case PLAYER_ADD_COMMODITY:
@@ -73,7 +74,7 @@ const squaresReducer = (
           positionToIndex(payload.square.position, dimensions) === i
             ? {
                 ...square,
-                value: (1 - payload.tax) * square.value
+                value: (1 - payload.tax.percentage) * square.value
               }
             : square
       )
@@ -81,17 +82,13 @@ const squaresReducer = (
     case SQUARES_UPDATE_VISIT_TIME: {
       const {squares, player} = state
       const playerIndex = positionToIndex(player.position, dimensions)
-      return squares
-        .map((square, i) => ({
-          ...square,
-          value: square.value + (square.visitPresence || 0)
-        }))
-        .map(
-          (square, i) =>
-            i === playerIndex
-              ? {...square, visitTime: square.visitTime + 1}
-              : square
-        )
+      return updateAt(squares)(playerIndex, square => ({
+        ...square,
+        visitTime: square.visitTime + 1
+      })).map((square, i) => ({
+        ...square,
+        value: square.value + (square.visitPresence || 0)
+      }))
     }
     case PLAYER_MOVE_POSITION: {
       const {player, squares} = state
@@ -119,6 +116,7 @@ const defaultWorld: World = {
     visitPresence: 1.1
   },
   squares: range(dimensions[0] * dimensions[1]).map(i => ({
+    index: i,
     value: 0,
     visitTime: 0,
     position: indexToPosition(i, dimensions),

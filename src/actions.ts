@@ -1,4 +1,5 @@
-import {Commodities, Tax, Income, Square} from './types'
+import {Commodities, Tax, Square} from './types'
+import {AnyAction} from '../node_modules/redux'
 
 /**
  * WORLD
@@ -19,11 +20,11 @@ export const playerPositonUpdate = (payload: {
 export const PLAYER_TAX_SQUARE = 'PLAYER_TAX_SQUARE'
 export interface PlayerTaxSquareAction {
   type: typeof PLAYER_TAX_SQUARE
-  payload: {square: Square; tax: number}
+  payload: {square: Square; tax: {percentage: number}}
 }
 export const playerTaxSquare = (
   square: Square,
-  tax: number
+  tax: {percentage: number}
 ): PlayerTaxSquareAction => ({
   type: PLAYER_TAX_SQUARE,
   payload: {square, tax}
@@ -50,14 +51,16 @@ export const squaresUpdateVisitTime = (): UpdateSquaresVisitTimeAction => ({
  * GOVERNMENT
  */
 
-export const ADD_INCOME_HISTORY = 'GOVERNMENT_ADD_INCOME_HISTORY'
-export interface AddGovernmentIncomeHistoryAction<T> {
-  type: typeof ADD_INCOME_HISTORY
-  payload: {income: Income<T>}
-}
-
 export const ADD_TAXES_HISTORY = 'GOVERNMENT_ADD_TAXES_HISTORY'
-export interface AddGovernmentTaxesHistoryAction<T> {
-  type: typeof ADD_INCOME_HISTORY
-  payload: {tax: Tax<T>}
+export interface AddGovernmentTaxesHistoryAction extends AnyAction {
+  type: typeof ADD_TAXES_HISTORY
+  payload: {tax: Tax}
+}
+export const addTaxesHistory = function(
+  tax: Tax
+): AddGovernmentTaxesHistoryAction {
+  return {
+    type: ADD_TAXES_HISTORY,
+    payload: {tax}
+  }
 }

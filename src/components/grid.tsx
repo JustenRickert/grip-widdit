@@ -59,10 +59,7 @@ class Grid extends React.Component<Props> {
         )}
         <StyledGrid innerRef={this.gridRef} columns={dimensions[0]}>
           {range(dimensions[0] * dimensions[1]).map(i => (
-            <GridSquare
-              key={i}
-              children={<TaxButton onClick={() => console.log("TAX 'EM")} />}
-            />
+            <GridSquare key={i} />
           ))}
         </StyledGrid>
       </div>

@@ -135,3 +135,13 @@ export const calculatePlayerVisitPresence = <
   )
   return presences
 }
+
+export const arrayClampLeft = function(n: number) {
+  return <T>(array: T[]): T[] =>
+    array.length > n ? array.slice(n - array.length, n) : array
+}
+
+export const updateAt = function<T>(coll: T[]) {
+  return (index: number, f: (t: T) => T) =>
+    coll.map((c, i) => (index === i ? f(c) : c))
+}

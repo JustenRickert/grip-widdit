@@ -6,7 +6,10 @@ import Game from './components/game'
 
 import store from './store'
 import {addArrowKeyListener} from './keyboard'
-import {addSquaresListener} from './squaresListeners'
+import {
+  dispatchSquaresStream,
+  dispatchHappinessEventStream
+} from './squaresListeners'
 
 render(
   <Provider store={store} children={<Game />} />,
@@ -14,4 +17,5 @@ render(
 )
 
 addArrowKeyListener()
-addSquaresListener()
+dispatchSquaresStream()
+dispatchHappinessEventStream()

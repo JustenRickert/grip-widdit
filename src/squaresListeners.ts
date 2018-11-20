@@ -3,7 +3,10 @@ import {timer} from 'rxjs'
 import store from './store'
 import {squaresUpdateVisitTime} from './actions'
 
-const secondCounter = timer(0, 1000)
+export const dispatchSquaresStream = function() {
+  return timer(0, 1000).subscribe(_ => store.dispatch(squaresUpdateVisitTime()))
+}
 
-export const addSquaresListener = () =>
-  secondCounter.subscribe(_ => store.dispatch(squaresUpdateVisitTime()))
+export const dispatchHappinessEventStream = function() {
+  return timer(0, 25000).subscribe(_ => console.log('TODO'))
+}

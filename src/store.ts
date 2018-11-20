@@ -1,8 +1,15 @@
-import {createStore, combineReducers} from 'redux'
+import {
+  createStore,
+  combineReducers,
+  applyMiddleware,
+  Dispatch,
+  AnyAction
+} from 'redux'
 
-import {worldReducer, WorldAction} from './world'
 import {World, Government} from './types'
-import {governmentReducer, GovernmentAction} from './government'
+import {worldReducer, WorldAction} from './reducers/world'
+import {governmentReducer, GovernmentAction} from './reducers/government'
+import {governmentMiddleware} from './middleware'
 
 export interface StoreState {
   world: World
@@ -16,7 +23,9 @@ const reducer = combineReducers<StoreState>({
   government: governmentReducer
 })
 
-const store = createStore<StoreState, StoreAction, undefined, undefined>(
-  reducer
+const store = createStore<StoreState, StoreAction, any, undefined>(
+  reducer,
+  undefined,
+  applyMiddleware(governmentMiddleware)
 )
 export default store

@@ -12,7 +12,8 @@ interface Props {
 
 const mapDispatch = (dispatch: Dispatch) => ({
   // A 15%(!) tax?!
-  onClick: (square: Square) => dispatch(playerTaxSquare(square, 0.15))
+  onClick: (square: Square) =>
+    dispatch(playerTaxSquare(square, {percentage: 0.15}))
 })
 
 const TaxButton = (props: Props) => (
